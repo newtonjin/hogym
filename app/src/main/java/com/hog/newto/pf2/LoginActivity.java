@@ -22,7 +22,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText loginSenha;
     private Button btnLogar;
     private Button btnCadastro;
-    private ProgressBar barrarLogin;
+    private ProgressBar barraLogin;
     private FirebaseAuth fb;
 
 
@@ -34,9 +34,10 @@ public class LoginActivity extends AppCompatActivity {
         loginSenha=(EditText)findViewById(R.id.reg_senha);
         btnLogar=(Button)findViewById(R.id.btnLogar);
         btnCadastro=(Button)findViewById(R.id.btnCadastro);
-        barrarLogin=(ProgressBar)findViewById(R.id.brLogin);
+        barraLogin=(ProgressBar)findViewById(R.id.brLogin);
         fb=FirebaseAuth.getInstance();
 
+            barraLogin.setVisibility(View.INVISIBLE);
 
         btnLogar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,19 +56,30 @@ public class LoginActivity extends AppCompatActivity {
                     if(task.isSuccessful()){
                         FirebaseUser user= fb.getCurrentUser();
                         sendToMain();
-                        barrarLogin.setVisibility(View.VISIBLE);
+                        barraLogin.setVisibility(View.VISIBLE);
                     }else{
                         String e=task.getException().getMessage().toString();
                         Toast.makeText(LoginActivity.this,"Erro " + e,Toast.LENGTH_LONG).show();
                     }
                     }
-                });barrarLogin.setVisibility(View.INVISIBLE);
+                });barraLogin.setVisibility(View.INVISIBLE);
                 }
             }
 
 
         });
+
+            btnCadastro.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intentCadastro=new Intent(LoginActivity.this,CadastroActivity.class);
+                    startActivity(intentCadastro);
+                    finish();
+                }
+            });
+
     }
+
 
     @Override
     protected void onStart() {

@@ -1,6 +1,7 @@
 package com.hog.newto.pf2;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -8,7 +9,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -35,8 +40,13 @@ public class CadastroActivity extends AppCompatActivity {
         brCadastro=(ProgressBar)findViewById(R.id.brCadastro);
 
         fb=FirebaseAuth.getInstance();
-
-
+        brCadastro.setVisibility(View.INVISIBLE);
+        btnJaPossui.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendToLogin();
+            }
+        });
         btnCriaConta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,7 +60,27 @@ public class CadastroActivity extends AppCompatActivity {
                 if(!TextUtils.isEmpty(email) && !TextUtils.isEmpty(senha) && !TextUtils.isEmpty(confSenha)){
                     //testa se as senhas batem
                     if(senha.equals(confSenha)){
+                        //Faz aparecer a progress Bar
+                        brCadastro.setVisibility(View.VISIBLE);
+                    //Agora adiciona o listener para operação com o firebase
+                        fb.createUserWithEmailAndPassword(email,senha).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                            //se a tarefa for concluida com sucesso acessa o método sendToMain q manda para os treinos
+                                if(task.isSuccessful()){
 
+                                    Toast.makeText(CadastroActivity.this,"Conta criada com sucesso",Toast.LENGTH_LONG).show();
+                                    sendToLogin();
+                                    brCadastro.setVisibility(View.INVISIBLE);
+                            }else{
+                                String e = task.getException().getMessage();
+                                Toast.makeText(CadastroActivity.this, "Não foi possível se cadastrar"+e, Toast.LENGTH_LONG).show();
+                            }
+                            }
+                        });
+
+                    }else{
+                        Toast.makeText(CadastroActivity.this, "Senhas não correspondem", Toast.LENGTH_LONG).show();
                     }
 
 
@@ -73,6 +103,11 @@ public class CadastroActivity extends AppCompatActivity {
     private void sendToMain() {
         Intent intentTreinos = new Intent(CadastroActivity.this,TreinosActivity.class);
         startActivity(intentTreinos);
+        finish();
+    }
+    private void sendToLogin(){
+        Intent intentLogin = new Intent(CadastroActivity.this,LoginActivity.class);
+        startActivity(intentLogin);
         finish();
     }
 }
