@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name" textColor="@color/branco">HoGYM</string>
+    <string name="btnAdd">Adicionar Treinos</string>
+    <string name="comunidade">Comunidade</string>
+    <string name="btnConta">Minha Conta</string>
+    <string name="txtEmail">Seu e-mail</string>
+    <string name="txtSenha">Senha</string>
+    <string name="btnLogar">Logar</string>
+    <string name="btnCadastro">Cadastrar</string>
+    <string name="btnSair">Sair</string>
+    <string name="btnCriarConta">Criar nova conta</string>
+    <string name="btnJaPossuiConta">Já está cadastrado ?</string>
+    <string name="txtConfirmaSenha">Confirmar senha</string>
+
+</resources>

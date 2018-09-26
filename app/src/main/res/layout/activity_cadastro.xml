@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CadastroActivity"
+    android:background="@color/colorPrimary">
+
+    <EditText
+        android:id="@+id/reg_email"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="216dp"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:hint="@string/txtEmail"
+        android:inputType="textEmailAddress"
+        android:textColor="@color/branco"
+        android:textColorHint="@color/branco"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/reg_senha"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:hint="@string/txtSenha"
+        android:inputType="textPassword"
+        android:textColor="@color/branco"
+        android:textColorHint="@color/branco"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reg_email" />
+
+    <Button
+        android:id="@+id/btnCriarConta"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="20dp"
+        android:background="@android:color/holo_orange_dark"
+        android:text="@string/btnCriarConta"
+        app:layout_constraintBottom_toTopOf="@+id/btnJaPossui"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnJaPossui"
+        android:layout_width="337dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="9dp"
+        android:layout_marginBottom="16dp"
+        android:background="@color/colorPrimary"
+        android:text="@string/btnJaPossuiConta"
+        android:textColor="@android:color/holo_orange_dark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.516"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/brCadastro"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="14dp"
+        android:indeterminate="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/imgHogym"
+        android:layout_width="219dp"
+        android:layout_height="129dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="56dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/brCadastro"
+        app:srcCompat="@mipmap/ichogym" />
+
+    <EditText
+        android:id="@+id/reg_confirma"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:ems="10"
+        android:hint="@string/txtConfirmaSenha"
+        android:inputType="textPassword"
+        android:textColorHint="@color/branco"
+        app:layout_constraintBottom_toTopOf="@+id/btnCriarConta"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reg_senha"
+        app:layout_constraintVertical_bias="0.512" />
+
+</android.support.constraint.ConstraintLayout>
