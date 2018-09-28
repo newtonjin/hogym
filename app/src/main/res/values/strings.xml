@@ -12,5 +12,7 @@
     <string name="btnJaPossuiConta">Já está cadastrado ?</string>
     <string name="txtConfirmaSenha">Confirmar senha</string>
     <string name="txtNomeTreino">Nome do treino</string>
+    <string name="btnConfirma">Confirmar</string>
+    <string name="txtNome">Nome</string>
 
 </resources>

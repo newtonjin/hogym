@@ -50,6 +50,8 @@ public class CadastroActivity extends AppCompatActivity {
         btnCriaConta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 //Passa os campos para Strings
                 String email=regEmail.getText().toString();
                 String senha=regSenha.getText().toString();
@@ -60,18 +62,27 @@ public class CadastroActivity extends AppCompatActivity {
                 if(!TextUtils.isEmpty(email) && !TextUtils.isEmpty(senha) && !TextUtils.isEmpty(confSenha)){
                     //testa se as senhas batem
                     if(senha.equals(confSenha)){
+
                         //Faz aparecer a progress Bar
                         brCadastro.setVisibility(View.VISIBLE);
-                    //Agora adiciona o listener para operação com o firebase
+
+
+
+                        //Agora adiciona o listener para operação com o firebase
                         fb.createUserWithEmailAndPassword(email,senha).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-                            //se a tarefa for concluida com sucesso acessa o método sendToMain q manda para os treinos
+
+
+                                //se a tarefa for concluida com sucesso a tarefa nos envia para o setup de conta
                                 if(task.isSuccessful()){
 
                                     Toast.makeText(CadastroActivity.this,"Conta criada com sucesso",Toast.LENGTH_LONG).show();
-                                    sendToLogin();
+                                    Intent intentConta=new Intent(CadastroActivity.this,ContaActivity.class);
+                                    startActivity(intentConta);
+
                                     brCadastro.setVisibility(View.INVISIBLE);
+                                    finish();
                             }else{
                                 String e = task.getException().getMessage();
                                 Toast.makeText(CadastroActivity.this, "Não foi possível se cadastrar"+e, Toast.LENGTH_LONG).show();

@@ -50,12 +50,16 @@ public class TreinosActivity extends AppCompatActivity {
             case R.id.btnAddTreino:
                 sendToTreino();
                 return true;
+            case R.id.btnConta:
+                sendToConta();
+                return true;
              default:
 
                  return false;
         }
 
     }
+
 
 
 
@@ -89,6 +93,10 @@ public class TreinosActivity extends AppCompatActivity {
 
         Intent intentTreino=new Intent(TreinosActivity.this,AddTreinoActivity.class);
         startActivity(intentTreino);
+        finish();
+    }public void sendToConta() {
+        Intent intentConta=new Intent(TreinosActivity.this,ContaActivity.class);
+        startActivity(intentConta);
         finish();
     }
 }

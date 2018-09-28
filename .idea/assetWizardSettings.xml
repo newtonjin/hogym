@@ -73,6 +73,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
+                                                <entry key="paddingPercent" value="15" />
                                                 <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
@@ -95,9 +96,9 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="iconShape" value="NONE" />
-                                      <entry key="imageAsset" value="C:\Users\newto\Downloads\picturetopeople.org-d3f7dddf666de4aa38e674ba19b6fcba0bf7a0282b726328d0.png" />
-                                      <entry key="outputName" value="ichogym" />
+                                      <entry key="iconShape" value="CIRCLE" />
+                                      <entry key="imageAsset" value="C:\Users\newto\Desktop\telas pf 1\default-profile-picture-gmail-2.png" />
+                                      <entry key="outputName" value="icprofile" />
                                     </map>
                                   </option>
                                 </PersistentState>

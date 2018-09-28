@@ -36,6 +36,9 @@ public class AddTreinoActivity extends AppCompatActivity {
             case R.id.btnSair:
                 logOut();
                 return true;
+            case R.id.btnConta:
+                sendToConta();
+                return true;
             default:
                 return false;
 
@@ -47,6 +50,11 @@ public class AddTreinoActivity extends AppCompatActivity {
             fb.signOut();
             sendToMain();
 
+    }
+    public void sendToConta(){
+        Intent intentConta=new Intent(AddTreinoActivity.this,ContaActivity.class);
+        startActivity(intentConta);
+        finish();
     }
 
     public void sendToMain(){
