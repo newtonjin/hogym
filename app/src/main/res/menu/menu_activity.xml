@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/btnAddTreino"
         android:icon="@mipmap/ic_add"
         android:title="@string/btnAdd"
         app:showAsAction="always" />

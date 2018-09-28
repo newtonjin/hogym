@@ -46,13 +46,18 @@ public class TreinosActivity extends AppCompatActivity {
             case R.id.btnSair:
                 logOut();
                 return true;
-
+            //caso a opção de adicionar treino seja selecionada
+            case R.id.btnAddTreino:
+                sendToTreino();
+                return true;
              default:
 
                  return false;
         }
 
     }
+
+
 
     @Override
     protected void onStart() {
@@ -79,5 +84,11 @@ public class TreinosActivity extends AppCompatActivity {
     private void logOut() {
         fb.signOut();
         sendToMain();
+    }
+    private void sendToTreino() {
+
+        Intent intentTreino=new Intent(TreinosActivity.this,AddTreinoActivity.class);
+        startActivity(intentTreino);
+        finish();
     }
 }
