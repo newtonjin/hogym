@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.constraint.Placeholder;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -14,11 +16,25 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
+
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -29,6 +45,11 @@ public class ContaActivity extends AppCompatActivity {
     private Button btnConfirma;
     private FirebaseAuth fb;
     private Uri imgURI=null;
+    private StorageReference sr;
+    private ProgressBar pb;
+    private FirebaseFirestore fbs;
+    private String user_id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,17 +61,98 @@ public class ContaActivity extends AppCompatActivity {
         imgConta=(CircleImageView)findViewById(R.id.imgConta);
         btnConfirma=(Button)findViewById(R.id.btnConfirma);
         fb=FirebaseAuth.getInstance();
+        sr= FirebaseStorage.getInstance().getReference();
+        fbs=FirebaseFirestore.getInstance();
+        user_id=fb.getCurrentUser().getUid();
 
+        //pega os dados inseridos no FireStore para serem mostrados no layout de atividade
+        fbs.collection("Usuarios").document(user_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    //checa se no id que pegamos lá em cima possue dados inseridos
+                    if (task.getResult().exists()){
+                     String name=task.getResult().getString("nome");
+                     String imagem=task.getResult().getString("imagem");
+
+                     txtNome.setText(name);
+
+
+
+                     imgURI = Uri.parse(imagem);
+
+                     //Utiliza da library do glide pra setar a imagem que a activity mostra para a que pegamos no fbscollection
+                        RequestOptions PlaceholderRequest=new RequestOptions();
+                        PlaceholderRequest.placeholder(R.mipmap.icprofile);
+                        Glide.with(ContaActivity.this).setDefaultRequestOptions(PlaceholderRequest).load(imagem).into(imgConta);
+                    }
+                }else{
+                    String erro=task.getException().toString();
+                    Toast.makeText(ContaActivity.this,"Erro "+erro, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
 
         btnConfirma.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String nome=txtNome.getText().toString();
-                if(!TextUtils.isEmpty(nome)){
-                Intent intentTreino=new Intent(ContaActivity.this,TreinosActivity.class);
-                startActivity(intentTreino);
-                finish();
 
+                final String nome=txtNome.getText().toString();
+
+
+                if(!TextUtils.isEmpty(nome)){
+                 //pega o id do usuário
+                 user_id=fb.getCurrentUser().getUid();
+
+
+
+                //faz com q a referencia de Storage do fb crie uma child com nome de "img_pefil"
+                    // e essa child tenha uma outra filha que armazene o id e .jpg para formato de imagem
+                 StorageReference img=sr.child("img_perfil").child(user_id+".jpg");
+
+
+                 //após isso faz a operação de inserção da image(URI) com um listener para testar a tarefa
+                 img.putFile(imgURI).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                     @Override
+                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                         if(task.isSuccessful()){
+
+
+                             //para poder baixar a imagem
+
+                             Uri download_uri=task.getResult().getUploadSessionUri();
+                             Toast.makeText(ContaActivity.this,"Upload feito com sucesso",Toast.LENGTH_LONG).show();
+
+
+                             //Criação de um objeto para mapear o usuário com a imagem e os dados
+
+                             Map<String, String> userMap=new HashMap<>();
+                             userMap.put("nome",nome);
+                             userMap.put("imagem",download_uri.toString());
+
+                             //Faz uma colection do FireStore usando o ID do usuário e o mapeamento userMap criado
+                             fbs.collection("Usuarios").document(user_id).set(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                 @Override
+                                 public void onComplete(@NonNull Task<Void> task) {
+                                     if(task.isSuccessful()){
+                                        sendToMain();
+                                     }else{
+                                         String erro=task.getException().toString();
+                                         Toast.makeText(ContaActivity.this,"Erro no armazenamento da imagem "+erro, Toast.LENGTH_LONG).show();
+                                     }
+
+                                 }
+                             });
+
+                         }else{
+                             String erro=task.getException().toString();
+                             Toast.makeText(ContaActivity.this,"Não foi possível fazer upload "+erro, Toast.LENGTH_LONG).show();
+
+                         }
+                     }
+                 });
+
+               sendToMain();
             }}
         });
 
@@ -68,15 +170,29 @@ public class ContaActivity extends AppCompatActivity {
 
 
                     }else{
-                        //código do git pra selecionar a imagem e recortar
-                        CropImage.activity()
-                                .setGuidelines(CropImageView.Guidelines.ON)
-                                .start(ContaActivity.this);
+
+                        selecionaImagem();
+
                     }
+                }else{
+                 selecionaImagem();
                 }
             }
         });
     }
+    //código do git pra selecionar a imagem e recortar
+    private void selecionaImagem() {
+        CropImage.activity()
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .start(ContaActivity.this);
+    }
+    public void sendToMain(){
+        Intent intentTreino=new Intent(ContaActivity.this,TreinosActivity.class);
+        startActivity(intentTreino);
+        finish();
+
+    }
+
     //método após modificação de imagem, ele pega o resultado do corte.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -91,4 +207,5 @@ public class ContaActivity extends AppCompatActivity {
             }
         }
     }
+
 }
