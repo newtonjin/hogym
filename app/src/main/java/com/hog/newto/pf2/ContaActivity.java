@@ -21,6 +21,11 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,6 +38,7 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,21 +55,42 @@ public class ContaActivity extends AppCompatActivity {
     private ProgressBar pb;
     private FirebaseFirestore fbs;
     private String user_id;
-
+    private LineChart grPeso;
+    private LineData grData;
+    private EditText txtPeso;
+    private float peso;
+    public int iss;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_conta);
+
         tlbar=(Toolbar)findViewById(R.id.tlBar);
+
         setSupportActionBar(tlbar);
+
         getSupportActionBar().setTitle("Minha Conta");
+
         txtNome=(EditText)findViewById(R.id.etxNome);
+
         imgConta=(CircleImageView)findViewById(R.id.imgConta);
+
         btnConfirma=(Button)findViewById(R.id.btnConfirma);
+
+
         fb=FirebaseAuth.getInstance();
         sr= FirebaseStorage.getInstance().getReference();
         fbs=FirebaseFirestore.getInstance();
         user_id=fb.getCurrentUser().getUid();
+
+
+        txtPeso=(EditText) findViewById(R.id.etxPeso);
+        txtPeso.setText("0");
+        txtPeso.getText().toString();
+
+        grPeso=(LineChart)findViewById(R.id.grPeso);
+
 
         //pega os dados inseridos no FireStore para serem mostrados no layout de atividade
         fbs.collection("Usuarios").document(user_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -179,6 +206,12 @@ public class ContaActivity extends AppCompatActivity {
                 }
             }
         });
+
+        LineDataSet lds=new LineDataSet(dataValues(),"Peso");
+        ArrayList<ILineDataSet> dataSets= new ArrayList<>();
+        dataSets.add(lds);
+        LineData ld=new LineData(dataSets);
+        grPeso.setData(ld);
     }
     //código do git pra selecionar a imagem e recortar
     private void selecionaImagem() {
@@ -206,6 +239,17 @@ public class ContaActivity extends AppCompatActivity {
                 Exception error = result.getError();
             }
         }
+    }
+    private ArrayList<Entry> dataValues() {
+        ArrayList<Entry> dataVals = new ArrayList<>();
+iss=0;
+
+              while(iss<=4){
+            dataVals.add(new Entry(iss, peso));
+
+            iss++;
+        }
+        return dataVals;
     }
 
 }

@@ -18,7 +18,7 @@
         android:layout_width="115dp"
         android:layout_height="102dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="72dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
         android:background="@android:color/transparent"
         android:src="@mipmap/icprofile"
@@ -33,11 +33,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="44dp"
+        android:layout_marginBottom="16dp"
         android:background="@android:color/holo_orange_dark"
         android:text="@string/btnConfirma"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
@@ -45,7 +46,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="88dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:hint="@string/txtNome"
@@ -68,6 +69,34 @@
         app:layout_constraintHorizontal_bias="0.428"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tlBar" />
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/grPeso"
+        android:layout_width="320dp"
+        android:layout_height="187dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="72dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.506"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etxNome"></com.github.mikephil.charting.charts.LineChart>
+
+    <EditText
+        android:id="@+id/etxPeso"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:hint="@string/etxPeso"
+        android:inputType="number"
+        android:textColorHint="@color/branco"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etxNome" />
 
 
 </android.support.constraint.ConstraintLayout>

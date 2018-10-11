@@ -14,5 +14,6 @@
     <string name="txtNomeTreino">Nome do treino</string>
     <string name="btnConfirma">Confirmar</string>
     <string name="txtNome">Nome</string>
+    <string name="etxPeso">Peso</string>
 
 </resources>
