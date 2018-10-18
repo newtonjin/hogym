@@ -108,6 +108,7 @@ public class ContaActivity extends AppCompatActivity {
 
                      imgURI = Uri.parse(imagem);
 
+
                      //Utiliza da library do glide pra setar a imagem que a activity mostra para a que pegamos no fbscollection
                         RequestOptions PlaceholderRequest=new RequestOptions();
                         PlaceholderRequest.placeholder(R.mipmap.icprofile);
