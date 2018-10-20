@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.constraint.Placeholder;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -37,7 +37,6 @@ import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,16 +57,21 @@ public class ContaActivity extends AppCompatActivity {
     private LineChart grPeso;
     private LineData grData;
     private EditText txtPeso;
+    private EditText txtAltura;
+    private String alturaS;
+    private String pesoS;
     private float peso;
+    private double imc,alturaD,pesoD;
     public int iss;
+    private TextView txtAdd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_conta);
-
+        txtAdd=(TextView)findViewById(R.id.txtAdd);
         tlbar=(Toolbar)findViewById(R.id.tlBar);
-
+        txtAltura=(EditText)findViewById(R.id.etxAltura);
         setSupportActionBar(tlbar);
 
         getSupportActionBar().setTitle("Minha Conta");
@@ -84,10 +88,10 @@ public class ContaActivity extends AppCompatActivity {
         fbs=FirebaseFirestore.getInstance();
         user_id=fb.getCurrentUser().getUid();
 
-
+        txtAltura.setText("0");
         txtPeso=(EditText) findViewById(R.id.etxPeso);
         txtPeso.setText("0");
-        txtPeso.getText().toString();
+
 
         grPeso=(LineChart)findViewById(R.id.grPeso);
 
@@ -120,6 +124,30 @@ public class ContaActivity extends AppCompatActivity {
                 }
             }
         });
+
+        //Adiciona os imc ao gráfico
+
+        txtAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alturaS=txtAltura.getText().toString();
+                pesoS=txtPeso.getText().toString();
+                alturaD=Double.parseDouble(alturaS);
+                pesoD=Double.parseDouble(pesoS);
+
+                try {
+                    geraIMC(alturaD, pesoD);
+
+                    Toast.makeText(ContaActivity.this,"IMC gerado com sucesso", Toast.LENGTH_LONG).show();
+                }catch (Exception e){
+                    String erro=e.getMessage().toString();
+                    Toast.makeText(ContaActivity.this, "Não foi possível gerar IMC"+  erro, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+
 
         btnConfirma.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -245,12 +273,25 @@ public class ContaActivity extends AppCompatActivity {
         ArrayList<Entry> dataVals = new ArrayList<>();
 iss=0;
 
+
+
               while(iss<=4){
-            dataVals.add(new Entry(iss, peso));
+            dataVals.add(new Entry(iss, (float)geraIMC(alturaD,pesoD)));
+
 
             iss++;
         }
         return dataVals;
+    }
+
+    //Metodo para gerar IMC
+    public double geraIMC(double altura, double peso){
+
+       imc=  peso/altura;
+        imc= Math.pow(imc,2);
+
+        return imc;
+
     }
 
 }

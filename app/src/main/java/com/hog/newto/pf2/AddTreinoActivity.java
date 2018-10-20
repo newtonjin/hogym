@@ -23,7 +23,7 @@ public class AddTreinoActivity extends AppCompatActivity {
     private EditText txtNomeTreino;
     private Button btnSalvaTreino;
 
-    Database bd= new Database(this);
+    DatabaseHog bd= new DatabaseHog(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

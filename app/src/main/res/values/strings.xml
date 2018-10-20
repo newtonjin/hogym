@@ -15,5 +15,6 @@
     <string name="btnConfirma">Confirmar</string>
     <string name="txtNome">Nome</string>
     <string name="etxPeso">Peso</string>
+    <string name="txtAdd">Adicionar</string>
 
 </resources>
