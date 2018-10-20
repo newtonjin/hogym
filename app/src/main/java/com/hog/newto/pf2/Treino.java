@@ -3,8 +3,8 @@ package com.hog.newto.pf2;
 import java.util.ArrayList;
 
 public class Treino {
-    String nomeTreino;
-    ArrayList<Exercicio> exercicio=new ArrayList<>();
+    private String nomeTreino;
+    private ArrayList<Exercicio> exercicio=new ArrayList<>();
 
     public Treino() {
     }

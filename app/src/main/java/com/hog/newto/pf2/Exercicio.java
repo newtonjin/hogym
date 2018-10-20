@@ -2,10 +2,10 @@ package com.hog.newto.pf2;
 
 public class Exercicio {
 
-    String nomeEx;
-    int Rep;
-    int tempo;
-    Byte[] foto;
+    private String nomeEx;
+    private int Rep;
+    private int tempo;
+    private Byte[] foto;
 
     public Exercicio() {
 
