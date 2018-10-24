@@ -4,33 +4,43 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.hog.newto.adapter.TreinosAdapter;
 
 import java.util.ArrayList;
+
+import com.hog.newto.pf2.Treino;
+import static com.hog.newto.pf2.Treino.retornarTodos;
 
 public class TreinosActivity extends AppCompatActivity {
 
     private Toolbar tlbar;
     private FirebaseAuth fb;
     private String nome;
+    private TreinosAdapter adapter;
+    private RecyclerView rvTreinos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_treinos);
+        configurarRecycler();
 
 
 
 
-
-
+        rvTreinos=findViewById(R.id.rvTreinos);
         tlbar=(Toolbar)findViewById(R.id.tlBar);
         setSupportActionBar(tlbar);
         getSupportActionBar().setTitle("HoGYM");
@@ -108,5 +118,17 @@ public class TreinosActivity extends AppCompatActivity {
         Intent intentConta=new Intent(TreinosActivity.this,ContaActivity.class);
         startActivity(intentConta);
         finish();
+    }private void configurarRecycler(){
+        // Configurando o gerenciador de layout para ser uma lista.
+        // Configurando o gerenciador de layout para ser uma lista.
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        rvTreinos.setLayoutManager(layoutManager);
+
+        // Adiciona o adapter que irá anexar os objetos à lista.
+        Treino treinos = new Treino(this);
+        adapter = new TreinosAdapter(retornarTodos());
+        rvTreinos.setAdapter(adapter);
+        rvTreinos.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
     }
 }

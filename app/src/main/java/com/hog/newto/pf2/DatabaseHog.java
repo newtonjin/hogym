@@ -2,9 +2,13 @@ package com.hog.newto.pf2;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseHog extends SQLiteOpenHelper {
     private final static String TABELA_TREINOS="tb_treinos";
@@ -15,6 +19,7 @@ public class DatabaseHog extends SQLiteOpenHelper {
     private final static String COLUNA_REPETICOES="repeticoes";
     private final static String COLUNA_TEMPO="tempo";
     private final static String COLUNA_FOTO="foto";
+    SQLiteDatabase db=this.getWritableDatabase();
 
 
 
@@ -53,7 +58,7 @@ public class DatabaseHog extends SQLiteOpenHelper {
         db.close();
     }public void editaTreino(Treino treino){
 
-    }public void mostraTreino(Treino treino){
+    }{
 
     }public void apagaTreino(Treino treino){
 
