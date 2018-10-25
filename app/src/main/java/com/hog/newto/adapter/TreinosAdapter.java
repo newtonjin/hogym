@@ -32,4 +32,5 @@ public class TreinosAdapter extends RecyclerView.Adapter<TreinosHolder> {
     public int getItemCount() {
         return treino != null ? treino.size():0;
     }
+
 }

@@ -37,6 +37,7 @@ import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,14 +56,13 @@ public class ContaActivity extends AppCompatActivity {
     private FirebaseFirestore fbs;
     private String user_id;
     private LineChart grPeso;
-    private LineData grData;
-    private EditText txtPeso;
+    private EditText txtPeso    ;
     private EditText txtAltura;
     private String alturaS;
     private String pesoS;
-    private float peso;
+
     private double imc,alturaD,pesoD;
-    public int iss;
+
     private TextView txtAdd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +73,7 @@ public class ContaActivity extends AppCompatActivity {
         tlbar=(Toolbar)findViewById(R.id.tlBar);
         txtAltura=(EditText)findViewById(R.id.etxAltura);
         setSupportActionBar(tlbar);
+
 
         getSupportActionBar().setTitle("Minha Conta");
 
@@ -93,7 +94,7 @@ public class ContaActivity extends AppCompatActivity {
         txtPeso.setText("0");
 
 
-        grPeso=(LineChart)findViewById(R.id.grPeso);
+
 
 
         //pega os dados inseridos no FireStore para serem mostrados no layout de atividade
@@ -126,7 +127,12 @@ public class ContaActivity extends AppCompatActivity {
         });
 
         //Adiciona os imc ao gráfico
-
+        grPeso=findViewById(R.id.grPeso);
+        LineDataSet lds=new LineDataSet(dataValues(),"Peso");
+        ArrayList<ILineDataSet> dataSets= new ArrayList<>();
+        dataSets.add(lds);
+        LineData ld=new LineData(dataSets);
+        grPeso.setData(ld);
         txtAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,7 +142,7 @@ public class ContaActivity extends AppCompatActivity {
                 pesoD=Double.parseDouble(pesoS);
 
                 try {
-                    geraIMC(alturaD, pesoD);
+
 
                     Toast.makeText(ContaActivity.this,"IMC gerado com sucesso", Toast.LENGTH_LONG).show();
                 }catch (Exception e){
@@ -236,11 +242,7 @@ public class ContaActivity extends AppCompatActivity {
             }
         });
 
-        LineDataSet lds=new LineDataSet(dataValues(),"Peso");
-        ArrayList<ILineDataSet> dataSets= new ArrayList<>();
-        dataSets.add(lds);
-        LineData ld=new LineData(dataSets);
-        grPeso.setData(ld);
+
     }
     //código do git pra selecionar a imagem e recortar
     private void selecionaImagem() {
@@ -268,14 +270,13 @@ public class ContaActivity extends AppCompatActivity {
                 Exception error = result.getError();
             }
         }
-    }
-    private ArrayList<Entry> dataValues() {
+    }private ArrayList<Entry> dataValues() {
         ArrayList<Entry> dataVals = new ArrayList<>();
-iss=0;
+        int iss=0;
 
 
 
-              while(iss<=4){
+        while(iss<=4){
             dataVals.add(new Entry(iss, (float)geraIMC(alturaD,pesoD)));
 
 
@@ -283,6 +284,7 @@ iss=0;
         }
         return dataVals;
     }
+
 
     //Metodo para gerar IMC
     public double geraIMC(double altura, double peso){

@@ -1,7 +1,6 @@
 package com.hog.newto.pf2;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -10,17 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Adapter;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.hog.newto.adapter.TreinosAdapter;
 
-import java.util.ArrayList;
-
-import com.hog.newto.pf2.Treino;
 import static com.hog.newto.pf2.Treino.retornarTodos;
 
 public class TreinosActivity extends AppCompatActivity {
@@ -35,16 +28,22 @@ public class TreinosActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_treinos);
+
+
+
+
+
+        rvTreinos=(RecyclerView)findViewById(R.id.rvTreinos);
+        tlbar=(Toolbar)findViewById(R.id.tlBar);
+        setSupportActionBar(tlbar);
+        getSupportActionBar().setTitle("HoGYM");
+        
+
+        fb=FirebaseAuth.getInstance();
         configurarRecycler();
 
 
 
-
-        rvTreinos=findViewById(R.id.rvTreinos);
-        tlbar=(Toolbar)findViewById(R.id.tlBar);
-        setSupportActionBar(tlbar);
-        getSupportActionBar().setTitle("HoGYM");
-        fb=FirebaseAuth.getInstance();
     }
 
 
@@ -65,10 +64,12 @@ public class TreinosActivity extends AppCompatActivity {
            //caso o botão de sair seja selecionado
             case R.id.btnSair:
                 logOut();
+
                 return true;
             //caso a opção de adicionar treino seja selecionada
-            case R.id.btnAddTreino:
+            case R.id.btnAddExercicio:
                 sendToTreino();
+                configurarRecycler();
                 return true;
             case R.id.btnConta:
                 sendToConta();

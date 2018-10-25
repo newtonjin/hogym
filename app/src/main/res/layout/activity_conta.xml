@@ -10,7 +10,7 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/tlBar"
         android:layout_width="match_parent"
-        android:layout_height="28dp"
+        android:layout_height="41dp"
         android:background="@color/colorPrimary"></android.support.v7.widget.Toolbar>
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -70,16 +70,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tlBar" />
 
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/grPeso"
-        android:layout_width="320dp"
-        android:layout_height="187dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="116dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etxNome"></com.github.mikephil.charting.charts.LineChart>
+
 
     <EditText
         android:id="@+id/etxPeso"
@@ -127,5 +118,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etxAltura" />
 
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/grPeso"
+        android:layout_width="271dp"
+        android:layout_height="160dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnConfirma"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
