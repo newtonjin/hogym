@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -56,10 +57,18 @@ public class ContaActivity extends AppCompatActivity {
     private FirebaseFirestore fbs;
     private String user_id;
     private LineChart grPeso;
+    private PieChart grPie;
     private EditText txtPeso    ;
     private EditText txtAltura;
     private String alturaS;
     private String pesoS;
+    private EditText dia;
+    private Float diaF;
+
+
+    public ArrayList<Entry> dataVals = new ArrayList<>();
+
+    public ArrayList<Entry> datax= new ArrayList<>();
 
     private double imc,alturaD,pesoD;
 
@@ -69,12 +78,12 @@ public class ContaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_conta);
-        txtAdd=(TextView)findViewById(R.id.txtAdd);
+        txtAdd=findViewById(R.id.txtAdd);
         tlbar=(Toolbar)findViewById(R.id.tlBar);
         txtAltura=(EditText)findViewById(R.id.etxAltura);
         setSupportActionBar(tlbar);
 
-
+        dia=findViewById(R.id.etxData);
         getSupportActionBar().setTitle("Minha Conta");
 
         txtNome=(EditText)findViewById(R.id.etxNome);
@@ -128,23 +137,48 @@ public class ContaActivity extends AppCompatActivity {
 
         //Adiciona os imc ao gráfico
         grPeso=findViewById(R.id.grPeso);
-        LineDataSet lds=new LineDataSet(dataValues(),"Peso");
-        ArrayList<ILineDataSet> dataSets= new ArrayList<>();
+        grPie=findViewById(R.id.grPie);
+        final LineDataSet lds=new LineDataSet(dataValues(),"imc");
+        final ArrayList<ILineDataSet> dataSets= new ArrayList<>();
         dataSets.add(lds);
         LineData ld=new LineData(dataSets);
+        grPeso.setDoubleTapToZoomEnabled(false);
+
+        grPeso.notifyDataSetChanged();
+        grPeso.fitScreen();
+        grPeso.setHorizontalScrollBarEnabled(true);
+
+        grPeso.setNoDataText("Sem IMC para gráfico");
+        grPeso.setBackgroundColor(getResources().getColor(R.color.branco));
         grPeso.setData(ld);
+        grPeso.invalidate();
+
+
         txtAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 alturaS=txtAltura.getText().toString();
                 pesoS=txtPeso.getText().toString();
                 alturaD=Double.parseDouble(alturaS);
                 pesoD=Double.parseDouble(pesoS);
-
+                diaF=Float.parseFloat(dia.getText().toString());
                 try {
-
-
+                    imc=geraIMC(alturaD,pesoD);
+                    dataVals.add(new Entry(diaF,(float)imc));
                     Toast.makeText(ContaActivity.this,"IMC gerado com sucesso", Toast.LENGTH_LONG).show();
+
+                    grPeso.setHorizontalScrollBarEnabled(true);
+                    lds.notifyDataSetChanged();
+                    grPeso.notifyDataSetChanged();
+
+                    grPeso.invalidate();
+
+                    grPeso.fitScreen();
+                    grPeso.resetViewPortOffsets();
+
+
+
                 }catch (Exception e){
                     String erro=e.getMessage().toString();
                     Toast.makeText(ContaActivity.this, "Não foi possível gerar IMC"+  erro, Toast.LENGTH_SHORT).show();
@@ -270,22 +304,22 @@ public class ContaActivity extends AppCompatActivity {
                 Exception error = result.getError();
             }
         }
-    }private ArrayList<Entry> dataValues() {
-        ArrayList<Entry> dataVals = new ArrayList<>();
-        int iss=0;
-
-
-
-        while(iss<=4){
-            dataVals.add(new Entry(iss, (float)geraIMC(alturaD,pesoD)));
-
-
-            iss++;
-        }
-        return dataVals;
     }
 
+    private ArrayList<Entry> dataValues() {
 
+        dataVals.add(new Entry(0,0));
+
+
+
+
+        return dataVals;
+    }
+    private ArrayList<Entry> datax(){
+            
+
+        return datax;
+    }
     //Metodo para gerar IMC
     public double geraIMC(double altura, double peso){
 
