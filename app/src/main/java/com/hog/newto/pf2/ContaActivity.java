@@ -26,7 +26,12 @@ import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.IPieDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,6 +46,7 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -64,11 +70,14 @@ public class ContaActivity extends AppCompatActivity {
     private String pesoS;
     private EditText dia;
     private Float diaF;
+    private double Massa;
+    private String diaS;
 
 
-    public ArrayList<Entry> dataVals = new ArrayList<>();
 
-    public ArrayList<Entry> datax= new ArrayList<>();
+
+
+
 
     private double imc,alturaD,pesoD;
 
@@ -135,23 +144,39 @@ public class ContaActivity extends AppCompatActivity {
             }
         });
 
-        //Adiciona os imc ao gráfico
+        //Referência aos gráficos
         grPeso=findViewById(R.id.grPeso);
         grPie=findViewById(R.id.grPie);
-        final LineDataSet lds=new LineDataSet(dataValues(),"imc");
-        final ArrayList<ILineDataSet> dataSets= new ArrayList<>();
-        dataSets.add(lds);
-        LineData ld=new LineData(dataSets);
+        final ArrayList<Entry> dataVals = new ArrayList<>();
+        dataVals.add(new Entry(0,0));
+        LineDataSet lds=new LineDataSet(dataVals,"imc");
+        LineData dataSets= new LineData(lds);
+        grPeso.setData(dataSets);
+
+
+        //estilização para line chart
         grPeso.setDoubleTapToZoomEnabled(false);
 
         grPeso.notifyDataSetChanged();
         grPeso.fitScreen();
         grPeso.setHorizontalScrollBarEnabled(true);
+        grPeso.setAutoScaleMinMaxEnabled(true);
 
         grPeso.setNoDataText("Sem IMC para gráfico");
         grPeso.setBackgroundColor(getResources().getColor(R.color.branco));
-        grPeso.setData(ld);
+
         grPeso.invalidate();
+
+        //Pie chart estilização
+        final ArrayList<PieEntry> dataX = new ArrayList<>();
+        PieDataSet dtSet= new PieDataSet(dataX,"Massa por peso");
+        PieData pdata= new PieData(dtSet);
+        grPie.setData(pdata);
+        dtSet.setColors(ColorTemplate.VORDIPLOM_COLORS);
+
+        grPie.notifyDataSetChanged();
+        grPie.invalidate();
+
 
 
         txtAdd.setOnClickListener(new View.OnClickListener() {
@@ -160,28 +185,49 @@ public class ContaActivity extends AppCompatActivity {
 
                 alturaS=txtAltura.getText().toString();
                 pesoS=txtPeso.getText().toString();
-                alturaD=Double.parseDouble(alturaS);
-                pesoD=Double.parseDouble(pesoS);
-                diaF=Float.parseFloat(dia.getText().toString());
+                diaS=dia.getText().toString();
+
+                if(!TextUtils.isEmpty(alturaS)&& !TextUtils.isEmpty(pesoS) && !TextUtils.isEmpty(diaS)){
                 try {
-                    imc=geraIMC(alturaD,pesoD);
+                    //Faz o calculo do imc apartir do peso e altura e insere na lista DataVals
+                    //configuração do line cart
+
+                    diaF=Float.parseFloat(diaS);
+                    alturaD=Double.parseDouble(alturaS);
+                    pesoD=Double.parseDouble(pesoS);
+                    imc=  pesoD/Math.pow((alturaD/100),2);
+
                     dataVals.add(new Entry(diaF,(float)imc));
                     Toast.makeText(ContaActivity.this,"IMC gerado com sucesso", Toast.LENGTH_LONG).show();
 
-                    grPeso.setHorizontalScrollBarEnabled(true);
-                    lds.notifyDataSetChanged();
+
+
                     grPeso.notifyDataSetChanged();
 
+
+
+
+                    grPeso.resetViewPortOffsets();
                     grPeso.invalidate();
 
-                    grPeso.fitScreen();
-                    grPeso.resetViewPortOffsets();
 
+
+
+
+                    //Pie chart
+                    Massa = pesoD-imc;
+
+                    dataX.add(new PieEntry((float)Massa,1));
+                    dataX.add(new PieEntry((float)imc,2));
+                    grPie.notifyDataSetChanged();
+                    grPie.invalidate();
 
 
                 }catch (Exception e){
                     String erro=e.getMessage().toString();
-                    Toast.makeText(ContaActivity.this, "Não foi possível gerar IMC"+  erro, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ContaActivity.this, "Não foi possível gerar IMC"+  erro, Toast.LENGTH_LONG).show();
+                }}else{
+                    Toast.makeText( ContaActivity.this, "Por favor insira os valores", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -306,28 +352,6 @@ public class ContaActivity extends AppCompatActivity {
         }
     }
 
-    private ArrayList<Entry> dataValues() {
 
-        dataVals.add(new Entry(0,0));
-
-
-
-
-        return dataVals;
-    }
-    private ArrayList<Entry> datax(){
-            
-
-        return datax;
-    }
-    //Metodo para gerar IMC
-    public double geraIMC(double altura, double peso){
-
-       imc=  peso/altura;
-        imc= Math.pow(imc,2);
-
-        return imc;
-
-    }
 
 }
