@@ -5,7 +5,15 @@ public class Exercicio {
     private String nomeEx;
     private int Rep;
     private int tempo;
+    private Integer idTreino;
 
+    public Integer getIdTreino() {
+        return idTreino;
+    }
+
+    public void setIdTreino(Integer idTreino) {
+        this.idTreino = idTreino;
+    }
 
     public Exercicio() {
 

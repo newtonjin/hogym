@@ -21,6 +21,8 @@ public class Treino {
     public Treino(String _nomeTreino) {
         this.nomeTreino = _nomeTreino;
 
+
+
     }
 
     public String getNomeTreino() {

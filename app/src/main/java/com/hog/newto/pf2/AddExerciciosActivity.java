@@ -9,6 +9,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AddExerciciosActivity extends AppCompatActivity {
     private ImageView addExercicio;
     private EditText etxNomeEx;
@@ -17,6 +20,7 @@ public class AddExerciciosActivity extends AppCompatActivity {
     private String nomeEx;
     private Integer qtRep;
     private Integer qtTempo;
+    public static List<Exercicio> ListEx;
 
 
 
@@ -30,6 +34,8 @@ public class AddExerciciosActivity extends AppCompatActivity {
         etxTempo=findViewById(R.id.etxTempo);
         addExercicio=findViewById(R.id.addExercicio);
 
+
+        ListEx=new ArrayList<>();
 
 
         addExercicio.setOnClickListener(new View.OnClickListener() {
@@ -56,10 +62,11 @@ public class AddExerciciosActivity extends AppCompatActivity {
 
         Exercicio ex= new Exercicio(nomeEx,qtRep,qtTempo);
 
-        DatabaseHog bd= new DatabaseHog(AddExerciciosActivity.this);
+
         try{
-            bd.addExercicio(ex);
+
             Toast.makeText(AddExerciciosActivity.this,"Exercicio adicionado com sucesso",Toast.LENGTH_LONG).show();
+            ListEx.add(ex);
             mudaTela();
         }catch (Exception e){
             Toast.makeText(AddExerciciosActivity.this,"Erro"+ e, Toast.LENGTH_LONG).show();

@@ -24,6 +24,7 @@ public class AddTreinoActivity extends AppCompatActivity {
     private Button btnAddExercicio;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +61,21 @@ public class AddTreinoActivity extends AppCompatActivity {
                 if(!TextUtils.isEmpty(nomeTreino)) {
                     DatabaseHog bd= new DatabaseHog(AddTreinoActivity.this);
                     bd.addTreino(new Treino(nomeTreino));
+                    Integer idTreino=bd.buscaultimoTreino();
+
+                    System.out.println("lista"+AddExerciciosActivity.ListEx.size());
+                    if(AddExerciciosActivity.ListEx !=null && !AddExerciciosActivity.ListEx.isEmpty()){
+                    for(Exercicio ex:AddExerciciosActivity.ListEx ){
+                        System.out.println("CU" + ex);
+                        ex.setIdTreino(idTreino);
+                        bd.addExercicio(ex);
+
+                    }}
+
+
+
                     Toast.makeText(AddTreinoActivity.this,"Treino salvo com sucesso",Toast.LENGTH_LONG).show();
+
                     sendToMain();
                 }else{
                     Toast.makeText(AddTreinoActivity.this,"O treino precisa de um nome", Toast.LENGTH_LONG).show();

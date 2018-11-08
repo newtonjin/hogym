@@ -5,10 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.FontsContract;
 import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.hog.newto.pf2.DbGateway.gw;
 
 public class DatabaseHog extends SQLiteOpenHelper {
     private final static String TABELA_TREINOS="tb_treinos";
@@ -34,7 +37,9 @@ public class DatabaseHog extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String query="CREATE TABLE IF NOT EXISTS "+TABELA_TREINOS+" ("+ID_TREINO+" INTEGER PRIMARY KEY AUTOINCREMENT ,"+COLUNA_NOME_TREINO+" VARCHAR)";
-        String query2=" CREATE TABLE IF NOT EXISTS "+TABELA_EXERCICIOS+"("+COLUNA_NOME_EXERCICIO+" VARCHAR PRIMARY KEY NOT NULL,"+COLUNA_REPETICOES+"  INTEGER,"+COLUNA_TEMPO+" INTEGER, "+COLUNA_FOTO+" blob) ";
+
+        //Tabela exercício
+        String query2="CREATE TABLE IF NOT EXISTS "+TABELA_EXERCICIOS+"("+COLUNA_NOME_EXERCICIO+" VARCHAR PRIMARY KEY NOT NULL,"+COLUNA_REPETICOES+"  INTEGER,"+COLUNA_TEMPO+" INTEGER, "+COLUNA_FOTO+" blob,"+ID_TREINO+ " INTEGER, FOREIGN KEY("+ID_TREINO+") REFERENCES "+TABELA_TREINOS+"("+ID_TREINO+")"+")";
         db.execSQL(query);
         db.execSQL(query2);
     }
@@ -69,6 +74,7 @@ public class DatabaseHog extends SQLiteOpenHelper {
         //isso aqui serve pra colocar as coisas no banco de dados
         //tipo ali vai subir o nome do exercício, que tá na classe do exercicio
         // na tabela onde tem o nome exercicio xD
+        values.put(ID_TREINO,exercicio.getIdTreino());
         values.put(COLUNA_NOME_EXERCICIO, exercicio.getNomeEx());
         values.put(COLUNA_REPETICOES, exercicio.getRep());
         values.put(COLUNA_TEMPO, exercicio.getTempo());
@@ -81,6 +87,17 @@ public class DatabaseHog extends SQLiteOpenHelper {
         db.close();
 
         //fueda
+
+    }public Integer buscaultimoTreino(){
+        SQLiteDatabase db=this.getWritableDatabase();
+        String[] id= new String[1];
+        id[0]=ID_TREINO;
+        String query="Select * from "+TABELA_TREINOS+" order by "+ID_TREINO+" desc limit 1";
+        Cursor cursor = gw.getDatabase().rawQuery("SELECT * FROM tb_treinos ORDER BY "+ID_TREINO+" DESC LIMIT 1", null);
+        Integer idResult= cursor.getColumnIndex(ID_TREINO);
+        System.out.println("porraid"+idResult);
+        db.close();
+        return idResult;
 
     }
 

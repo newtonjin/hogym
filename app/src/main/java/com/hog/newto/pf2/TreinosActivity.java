@@ -120,7 +120,7 @@ public class TreinosActivity extends AppCompatActivity {
         startActivity(intentConta);
         finish();
     }private void configurarRecycler(){
-        // Configurando o gerenciador de layout para ser uma lista.
+
         // Configurando o gerenciador de layout para ser uma lista.
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
