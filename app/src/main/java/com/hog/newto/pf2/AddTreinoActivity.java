@@ -56,7 +56,7 @@ public class AddTreinoActivity extends AppCompatActivity {
         btnAddExercicio = findViewById(R.id.btnAddExercicio);
         txtNomeTreino = (EditText) findViewById(R.id.txtNomeTreino);
         lsExercicio=new ArrayList<>();
-
+        lvExercicio=findViewById(R.id.lvExercicios);
         databaseTreinos=FirebaseDatabase.getInstance().getReference("Treinos");
 
 
@@ -139,9 +139,7 @@ public class AddTreinoActivity extends AppCompatActivity {
 
     public void sendToMain() {
         Intent intentTreinos = new Intent(AddTreinoActivity.this, TreinosActivity.class);
-        Bundle nome = new Bundle();
-        nome.putString("nome", nomeTreino);
-        intentTreinos.putExtras(nome);
+
         startActivity(intentTreinos);
         finish();
 
@@ -201,7 +199,7 @@ public class AddTreinoActivity extends AppCompatActivity {
                 databaseExercicio.child(idExercicio).setValue(ex);
                 Toast.makeText(AddTreinoActivity.this,"Exercicio adicionado com sucesso",Toast.LENGTH_LONG).show();
 
-                startActivity(new Intent(AddTreinoActivity.this,TreinosActivity.class));
+
             }catch (Exception e){
                 Toast.makeText(AddTreinoActivity.this,"Erro"+ e, Toast.LENGTH_LONG).show();
             }}else{

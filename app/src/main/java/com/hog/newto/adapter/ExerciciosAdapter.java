@@ -40,8 +40,8 @@ public class ExerciciosAdapter  extends ArrayAdapter<Exercicio> {
 
 
         txtNome.setText(ex.getNomeEx());
-        txtRep.setText(ex.getRep());
-        txtTempo.setText(ex.getTempo());
+        txtRep.setText("x"+String.valueOf(ex.getRep()));
+        txtTempo.setText("00:"+String.valueOf(ex.getTempo()));
 
 
 
