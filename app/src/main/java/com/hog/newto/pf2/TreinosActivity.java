@@ -36,6 +36,7 @@ public class TreinosActivity extends AppCompatActivity {
     private ListView lvTreinos;
     private List<Treino> lsTreino;
     protected DatabaseReference databaseTreinos;
+    static String idS;
 
 
     @Override
@@ -45,7 +46,6 @@ public class TreinosActivity extends AppCompatActivity {
 
 
 
-        databaseTreinos=FirebaseDatabase.getInstance().getReference("Treinos");
 
 
         lvTreinos=findViewById(R.id.lvTreinos);
@@ -55,17 +55,31 @@ public class TreinosActivity extends AppCompatActivity {
         
         lsTreino= new ArrayList<>();
         fb=FirebaseAuth.getInstance();
+        final String user_id=fb.getCurrentUser().getUid();
 
+        databaseTreinos=FirebaseDatabase.getInstance().getReference("Usuarios").child(user_id);
         lvTreinos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Treino t= lsTreino.get(position);
-                Intent intent = new Intent(getApplicationContext(), AddTreinoActivity.class);
-                intent.putExtra("TREINO_ID", t.getIdTreino());
-                intent.putExtra("TREINO_NOME", t.getNomeTreino());
 
+                Intent intent = new Intent(getApplicationContext(), AddTreinoActivity.class);
+                intent.putExtra("TREINO_ID",t.getIdTreino());
+;
+                idS=t.getIdTreino();
                 // enfim, chama a activity
                 startActivity(intent);
+            }
+        });
+
+        lvTreinos.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Treino t= lsTreino.get(position);
+                String i=t.getIdTreino();
+                databaseTreinos=FirebaseDatabase.getInstance().getReference("Usuarios").child(user_id).child("Treinos").child(i);
+                databaseTreinos.removeValue();
+                return true;
             }
         });
 
@@ -114,6 +128,7 @@ public class TreinosActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        String user_id=fb.getCurrentUser().getUid();
         if(currentUser==null){
 
             //Caso não esteja logado nos leva ao intent de login! VV
@@ -121,6 +136,7 @@ public class TreinosActivity extends AppCompatActivity {
         }else{
             //logou
             //Adiciona treinos na lista dos treinos
+            databaseTreinos=FirebaseDatabase.getInstance().getReference("Usuarios").child(user_id).child("Treinos");
             databaseTreinos.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -162,8 +178,9 @@ public class TreinosActivity extends AppCompatActivity {
         startActivity(intentTreino);
         finish();
     }public void sendToConta() {
-        Intent intentConta=new Intent(TreinosActivity.this,ContaActivity.class);
-        startActivity(intentConta);
+        Intent intent=new Intent(TreinosActivity.this,ContaActivity.class);
+        intent.putExtra("validador","2");
+        startActivity(intent);
         finish();
     }
     }

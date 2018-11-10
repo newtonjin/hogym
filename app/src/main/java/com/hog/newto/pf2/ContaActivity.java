@@ -35,6 +35,8 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -61,6 +63,7 @@ public class ContaActivity extends AppCompatActivity {
     private StorageReference sr;
     private ProgressBar pb;
     private FirebaseFirestore fbs;
+    private DatabaseReference db;
     private String user_id;
     private LineChart grPeso;
     private PieChart grPie;
@@ -106,6 +109,8 @@ public class ContaActivity extends AppCompatActivity {
         sr= FirebaseStorage.getInstance().getReference();
         fbs=FirebaseFirestore.getInstance();
         user_id=fb.getCurrentUser().getUid();
+        db=FirebaseDatabase.getInstance().getReference("Usuarios").child(user_id);
+        db.setValue(user_id);
 
         txtAltura.setText("0");
         txtPeso=(EditText) findViewById(R.id.etxPeso);

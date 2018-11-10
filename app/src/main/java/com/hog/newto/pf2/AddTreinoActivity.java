@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -25,14 +26,15 @@ import com.hog.newto.adapter.ExerciciosAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.hog.newto.pf2.TreinosActivity.idS;
+
 public class AddTreinoActivity extends AppCompatActivity {
     private Toolbar tlbar;
     private FirebaseAuth fb;
     private String nomeTreino;
     private EditText txtNomeTreino;
     private Button btnSalvaTreino;
-    private DatabaseReference databaseTreinos;
-    private DatabaseReference databaseExercicio;
+    private DatabaseReference db;
     private Button btnAddExercicio;
     private ListView lvExercicio;
     static Treino t;
@@ -40,6 +42,8 @@ public class AddTreinoActivity extends AppCompatActivity {
     private String nomeEx;
     private Integer qtRep,qtTempo;
     private List<Exercicio> lsExercicio;
+    private ImageView btnExecuta;
+    private String user_id;
 
 
     @Override
@@ -57,19 +61,17 @@ public class AddTreinoActivity extends AppCompatActivity {
         txtNomeTreino = (EditText) findViewById(R.id.txtNomeTreino);
         lsExercicio=new ArrayList<>();
         lvExercicio=findViewById(R.id.lvExercicios);
-        databaseTreinos=FirebaseDatabase.getInstance().getReference("Treinos");
 
+        btnExecuta=findViewById(R.id.btnExecuta);
+        user_id=fb.getCurrentUser().getUid();
 
 
         btnSalvaTreino = (Button) findViewById(R.id.btnSalvaTreino);
-        Intent intent=getIntent();
-        String id=intent.getStringExtra("TREINO_ID");
-        if (id == null) {
-            id = getIntent().getStringExtra("TREINO_ID");
-        } else {
-            id = getIntent().getStringExtra("TREINO_ID");
-        }
-        databaseExercicio=FirebaseDatabase.getInstance().getReference("Exercicios").child(id);
+
+
+
+
+        db=FirebaseDatabase.getInstance().getReference("Usuarios").child(user_id).child("Exercicios");
 
         btnAddExercicio.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,6 +79,15 @@ public class AddTreinoActivity extends AppCompatActivity {
                 addExercicio();
             }
         });
+
+
+        btnExecuta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(AddTreinoActivity.this,ExecutaTreinoActivity.class));
+            }
+        });
+
 
 
         //Listener pro botão de salvar
@@ -149,13 +160,16 @@ public class AddTreinoActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        databaseExercicio.addValueEventListener(new ValueEventListener() {
+        db=FirebaseDatabase.getInstance().getReference("Usuarios").child(user_id).child("Exercicios").child(idS);
+        db.addValueEventListener(new ValueEventListener() {
+
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 lsExercicio.clear();
                 for(DataSnapshot exeSnapshot:dataSnapshot.getChildren()){
                     Exercicio ex = exeSnapshot.getValue(Exercicio.class);
                     lsExercicio.add(ex);
+
                 }
 
 
@@ -173,15 +187,19 @@ public class AddTreinoActivity extends AppCompatActivity {
 
     public void addTreino() {
         nomeTreino = txtNomeTreino.getText().toString();
-
-        String idTreino = databaseTreinos.push().getKey();
+        db=FirebaseDatabase.getInstance().getReference("Usuarios").child(user_id).child("Treinos");
+        String idTreino = db.push().getKey();
         if (!TextUtils.isEmpty(nomeTreino)) {
             t = new Treino(idTreino, nomeTreino);
-            databaseTreinos.child(idTreino).setValue(t);
+            db=FirebaseDatabase.getInstance().getReference("Usuarios").child(user_id).child("Treinos").child(idTreino);
+            db.setValue(t);
 
         } else {
             Toast.makeText(AddTreinoActivity.this, "O treino precisa de um nome", Toast.LENGTH_LONG).show();
-        }}public void addExercicio(){
+        }
+    }
+
+        public void addExercicio(){
 
 
 
@@ -191,12 +209,13 @@ public class AddTreinoActivity extends AppCompatActivity {
 
 
 
-
+        Intent i=getIntent();
         if(!TextUtils.isEmpty(nomeEx)&&!TextUtils.isEmpty(etxRep.getText().toString())&&!TextUtils.isEmpty(etxTemp.getText().toString())){
             try{
-                String idExercicio=databaseExercicio.push().getKey();
+                db = FirebaseDatabase.getInstance().getReference("Usuarios").child(user_id).child("Exercicios").child(i.getStringExtra("TREINO_ID"));
+                String idExercicio=db.push().getKey();
                 Exercicio ex= new Exercicio(idExercicio,nomeEx,qtRep,qtTempo);
-                databaseExercicio.child(idExercicio).setValue(ex);
+                db.child(idExercicio).setValue(ex);
                 Toast.makeText(AddTreinoActivity.this,"Exercicio adicionado com sucesso",Toast.LENGTH_LONG).show();
 
 
