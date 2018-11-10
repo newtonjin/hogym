@@ -41,7 +41,7 @@ public class AddTreinoActivity extends AppCompatActivity {
     private EditText etxNomeExercicio,etxRep,etxTemp;
     private String nomeEx;
     private Integer qtRep,qtTempo;
-    private List<Exercicio> lsExercicio;
+    public List<Exercicio> lsExercicio;
     private ImageView btnExecuta;
     private String user_id;
 
@@ -160,6 +160,7 @@ public class AddTreinoActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        if(idS!=null){
         db=FirebaseDatabase.getInstance().getReference("Usuarios").child(user_id).child("Exercicios").child(idS);
         db.addValueEventListener(new ValueEventListener() {
 
@@ -182,7 +183,9 @@ public class AddTreinoActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });
+        });}else{
+            System.out.println("Erro");
+        }
     }
 
     public void addTreino() {

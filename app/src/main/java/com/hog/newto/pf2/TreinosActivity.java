@@ -37,6 +37,7 @@ public class TreinosActivity extends AppCompatActivity {
     private List<Treino> lsTreino;
     protected DatabaseReference databaseTreinos;
     static String idS;
+    String user_id;
 
 
     @Override
@@ -55,7 +56,7 @@ public class TreinosActivity extends AppCompatActivity {
         
         lsTreino= new ArrayList<>();
         fb=FirebaseAuth.getInstance();
-        final String user_id=fb.getCurrentUser().getUid();
+        user_id=fb.getCurrentUser().getUid();
 
         databaseTreinos=FirebaseDatabase.getInstance().getReference("Usuarios").child(user_id);
         lvTreinos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
