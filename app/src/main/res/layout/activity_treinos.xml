@@ -20,19 +20,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"></android.support.v7.widget.Toolbar>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvTreinos"
-        android:layout_width="368dp"
-        android:layout_height="510dp"
-        android:layout_marginStart="8dp"
+    <ListView
+        android:id="@+id/lvTreinos"
+        android:layout_width="match_parent"
+        android:layout_height="513dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        tools:listitem="@layout/recycler_treino"
+        android:layout_marginBottom="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tlBar"
-        />
-
+        app:layout_constraintTop_toBottomOf="@+id/tlBar"></ListView>
 </android.support.constraint.ConstraintLayout>

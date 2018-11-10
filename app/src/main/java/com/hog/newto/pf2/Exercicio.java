@@ -5,14 +5,16 @@ public class Exercicio {
     private String nomeEx;
     private int Rep;
     private int tempo;
-    private Integer idTreino;
+    private String idExercicio;
 
-    public Integer getIdTreino() {
-        return idTreino;
+
+
+    public String getIdExercicio() {
+        return idExercicio;
     }
 
-    public void setIdTreino(Integer idTreino) {
-        this.idTreino = idTreino;
+    public void setIdExercicio(String idExercicio) {
+        this.idExercicio = idExercicio;
     }
 
     public Exercicio() {
@@ -20,8 +22,8 @@ public class Exercicio {
 
     }
 
-    public Exercicio(String _nome, int _rep, int _tempo){
-
+    public Exercicio(String idExercicio,String _nome, int _rep, int _tempo){
+        this.idExercicio=idExercicio;
         this.nomeEx=_nome;
         this.Rep=_rep;
         this.tempo=_tempo;

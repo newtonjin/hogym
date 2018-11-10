@@ -1,6 +1,7 @@
 package com.hog.newto.pf2;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -9,12 +10,22 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.hog.newto.adapter.TreinosAdapter;
 
-import static com.hog.newto.pf2.Treino.retornarTodos;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class TreinosActivity extends AppCompatActivity {
 
@@ -22,7 +33,10 @@ public class TreinosActivity extends AppCompatActivity {
     private FirebaseAuth fb;
     private String nome;
     private TreinosAdapter adapter;
-    private RecyclerView rvTreinos;
+    private ListView lvTreinos;
+    private List<Treino> lsTreino;
+    protected DatabaseReference databaseTreinos;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,17 +45,29 @@ public class TreinosActivity extends AppCompatActivity {
 
 
 
+        databaseTreinos=FirebaseDatabase.getInstance().getReference("Treinos");
 
 
-        rvTreinos=(RecyclerView)findViewById(R.id.rvTreinos);
+        lvTreinos=findViewById(R.id.lvTreinos);
         tlbar=(Toolbar)findViewById(R.id.tlBar);
         setSupportActionBar(tlbar);
         getSupportActionBar().setTitle("HoGYM");
         
-
+        lsTreino= new ArrayList<>();
         fb=FirebaseAuth.getInstance();
-        configurarRecycler();
 
+        lvTreinos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Treino t= lsTreino.get(position);
+                Intent intent = new Intent(getApplicationContext(), AddTreinoActivity.class);
+                intent.putExtra("TREINO_ID", t.getIdTreino());
+                intent.putExtra("TREINO_NOME", t.getNomeTreino());
+
+                // enfim, chama a activity
+                startActivity(intent);
+            }
+        });
 
 
     }
@@ -69,7 +95,7 @@ public class TreinosActivity extends AppCompatActivity {
             //caso a opção de adicionar treino seja selecionada
             case R.id.btnAddExercicio:
                 sendToTreino();
-                configurarRecycler();
+
                 return true;
             case R.id.btnConta:
                 sendToConta();
@@ -94,7 +120,27 @@ public class TreinosActivity extends AppCompatActivity {
             sendToMain();
         }else{
             //logou
+            //Adiciona treinos na lista dos treinos
+            databaseTreinos.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    lsTreino.clear();
 
+                    for(DataSnapshot treinoSnapshot:dataSnapshot.getChildren()){
+                        Treino t= treinoSnapshot.getValue(Treino.class);
+
+                        lsTreino.add(t);
+                    }
+                    TreinosAdapter adapter = new TreinosAdapter(TreinosActivity.this, lsTreino);
+                    lvTreinos.setAdapter(adapter);
+                }
+
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
         }
     }
 //método para mandar para página de treinos
@@ -119,17 +165,6 @@ public class TreinosActivity extends AppCompatActivity {
         Intent intentConta=new Intent(TreinosActivity.this,ContaActivity.class);
         startActivity(intentConta);
         finish();
-    }private void configurarRecycler(){
-
-        // Configurando o gerenciador de layout para ser uma lista.
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        rvTreinos.setLayoutManager(layoutManager);
-
-        // Adiciona o adapter que irá anexar os objetos à lista.
-        Treino treinos = new Treino(this);
-        adapter = new TreinosAdapter(retornarTodos());
-        rvTreinos.setAdapter(adapter);
-        rvTreinos.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
     }
-}
+    }
+
