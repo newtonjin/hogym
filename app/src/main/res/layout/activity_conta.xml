@@ -148,6 +148,13 @@
 
             </com.github.mikephil.charting.charts.PieChart>
 
+            <TextView
+                android:id="@+id/txtDica"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text='""'
+                android:textColor="@color/branco" />
+
             <Button
                 android:id="@+id/btnConfirma"
                 android:layout_width="327dp"

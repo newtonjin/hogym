@@ -78,6 +78,7 @@ public class ContaActivity extends AppCompatActivity {
     private Float diaF;
     private double Massa;
     private String diaS;
+    private TextView txtDica;
 
 
 
@@ -97,7 +98,7 @@ public class ContaActivity extends AppCompatActivity {
         tlbar=(Toolbar)findViewById(R.id.tlBar);
         txtAltura=(EditText)findViewById(R.id.etxAltura);
         setSupportActionBar(tlbar);
-
+        txtDica=findViewById(R.id.txtDica);
         dia=findViewById(R.id.etxData);
         getSupportActionBar().setTitle("Minha Conta");
 
@@ -254,6 +255,23 @@ public class ContaActivity extends AppCompatActivity {
                     grPie.notifyDataSetChanged();
                     grPie.invalidate();
 
+                    if(imc<=17){
+                        txtDica.setText("\nProvavelmente você esteja muito abaixo do peso, toma cuidado! Se alimente com alimentos mais ricos em vitaminas e carboidratos em geral! imc de "+(int)imc+" é considerado muito baixo! procure um nutricionista.");
+                    }else if(imc>=18 && imc<=18.49){
+                        txtDica.setText("\nVocê pode estar abaixo do seu peso, adapte sua dieta para uma maior riqueza de proteínas e carboidratos, seu imc é de "+(int)imc+", procure um nutricionista.");
+                    }else if(imc>=18.50 && imc<=24.99){
+                        txtDica.setText("\nVocê tá no seu peso ideal! obviamente que isto é uma aproximação, caso queima aumentar Massa Corporea ou músculos calcule seus macro nutrientes e adapte sua dieta! seu imc é de "+(int)imc+" procure um nutricionista!");
+                    }else if(imc>=25 && imc<=29.99){
+                        txtDica.setText("\nProvavelmente você esteja acima do peso! caso seja massa muscular não tem problemas, mas se for visivel a gordura é melhor adaptar sua dieta, aumentar em proteinas e diminuir em gorduras e carbos! seu imc é de "+(int)imc+" procure um nutricista!");
+                    }else if(imc>=30 && imc<=34.99){
+                        txtDica.setText("\nOpa! provavelmente você esteja no início de uma obesidade, tome cuidado, diminua gorduras e carboidratos em excesso da sua dieta! seu imc é de "+(int)imc+" procure um nutricista o mais rápido possível!");
+                    }else if(imc>=35 && imc<=39.99){
+                        txtDica.setText("\nProvavelmente você esteja muito acima de seu peso!! tome bastante cuidado! mude drasticamente quantidade de carboidratos e gorduras e pratique atividades, seu imc é de "+(int)imc+" procure um nutricista o mais rápido possível!");
+                    }else if(imc>=40){
+                        txtDica.setText("\nO indice de massa corpórea do seu corpo está muito além do ideal, tome bastante cuidado, sua saúde está sendo prejudicada, pratique atividades e diminua bastante os carboidratos e gorduras ingeridas, seu imc é de "+imc+" procure um nutricista urgentemente!");
+                    }else{
+                        txtDica.setText("");
+                    }
 
                 }catch (Exception e){
                     String erro=e.getMessage().toString();
