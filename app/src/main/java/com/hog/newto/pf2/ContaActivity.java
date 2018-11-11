@@ -23,6 +23,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.LimitLine;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -112,9 +115,9 @@ public class ContaActivity extends AppCompatActivity {
         db=FirebaseDatabase.getInstance().getReference("Usuarios").child(user_id);
         db.setValue(user_id);
 
-        txtAltura.setText("0");
+        txtAltura.setText("");
         txtPeso=(EditText) findViewById(R.id.etxPeso);
-        txtPeso.setText("0");
+        txtPeso.setText("");
 
 
 
@@ -157,11 +160,29 @@ public class ContaActivity extends AppCompatActivity {
         LineDataSet lds=new LineDataSet(dataVals,"imc");
         LineData dataSets= new LineData(lds);
         grPeso.setData(dataSets);
+        LimitLine obesidade= new LimitLine(39f,"Obesidade");
+        obesidade.setLineWidth(4f);
+        obesidade.enableDashedLine(10f,10f,0f);
+        obesidade.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
+        obesidade.setTextSize(15f);
 
+        LimitLine magreza= new LimitLine(18.5f,"Magreza");
+        magreza.setLineWidth(4f);
+        magreza.enableDashedLine(10f,10f,0f);
+        magreza.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
+        magreza.setTextSize(15f);
 
+        YAxis eixoY= grPeso.getAxisLeft();
+        eixoY.removeAllLimitLines();
+        eixoY.addLimitLine(obesidade);
+        eixoY.addLimitLine(magreza);
+        eixoY.setAxisMaximum(100f);
+        eixoY.enableGridDashedLine(10f,10f,0);
+        eixoY.setDrawLimitLinesBehindData(true);
         //estilização para line chart
         grPeso.setDoubleTapToZoomEnabled(false);
-
+        XAxis eixoX=grPeso.getXAxis();
+        eixoX.setAxisMaximum(31f);
         grPeso.notifyDataSetChanged();
         grPeso.fitScreen();
         grPeso.setHorizontalScrollBarEnabled(true);
@@ -169,6 +190,8 @@ public class ContaActivity extends AppCompatActivity {
 
         grPeso.setNoDataText("Sem IMC para gráfico");
         grPeso.setBackgroundColor(getResources().getColor(R.color.branco));
+
+
 
         grPeso.invalidate();
 
@@ -205,15 +228,19 @@ public class ContaActivity extends AppCompatActivity {
                     dataVals.add(new Entry(diaF,(float)imc));
                     Toast.makeText(ContaActivity.this,"IMC gerado com sucesso", Toast.LENGTH_LONG).show();
 
-
-
+                    txtAltura.setText("");
+                    txtPeso.setText("");
+                    dia.setText("");
                     grPeso.notifyDataSetChanged();
+                    grPeso.setVisibleXRangeMaximum((float)imc);
 
 
 
 
-                    grPeso.resetViewPortOffsets();
+
                     grPeso.invalidate();
+
+                    grPeso.setAutoScaleMinMaxEnabled(true);
 
 
 
