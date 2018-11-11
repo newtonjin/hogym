@@ -77,6 +77,9 @@ public class AddTreinoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 addExercicio();
+                etxNomeExercicio.setText("");
+                etxRep.setText("");
+                etxTemp.setText("");
             }
         });
 
