@@ -15,6 +15,7 @@
         android:layout_marginTop="40dp"
         android:layout_marginEnd="64dp"
         android:text="Nome do Exercicio"
+        android:textAlignment="center"
         android:textColor="@color/branco"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -29,9 +30,11 @@
         android:layout_marginStart="147dp"
         android:layout_marginTop="196dp"
         android:layout_marginEnd="156dp"
+        android:textAlignment="center"
         android:textColor="@color/branco"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtExecNome" />
 
@@ -43,6 +46,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="53dp"
         android:text="Tempo"
+        android:textAlignment="center"
         android:textColor="@color/branco"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/btnProx"

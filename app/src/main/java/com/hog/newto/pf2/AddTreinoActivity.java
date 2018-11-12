@@ -63,7 +63,7 @@ public class AddTreinoActivity extends AppCompatActivity {
         lsExercicio=new ArrayList<>();
         lvExercicio=findViewById(R.id.lvExercicios);
 
-
+        //pega o id do usuário
         user_id=fb.getCurrentUser().getUid();
 
 
@@ -71,8 +71,9 @@ public class AddTreinoActivity extends AppCompatActivity {
 
 
 
-
+        //faz referência a child de exercícios
         db=FirebaseDatabase.getInstance().getReference("Usuarios").child(user_id).child("Exercicios");
+
 
         btnAddExercicio.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,6 +113,7 @@ public class AddTreinoActivity extends AppCompatActivity {
                String nomeExercicioIntent=e.getNomeEx();
                int tempoIntent=e.getTempo();
                int repIntent=e.getRep();
+               //Passa valores para proxima activity por intents
                Intent i= new Intent(AddTreinoActivity.this,ExecutaTreinoActivity.class);
                i.putExtra("NOME_EXE",nomeExercicioIntent);
                i.putExtra("TEMPO_EXE",String.valueOf(tempoIntent));
@@ -219,15 +221,16 @@ public class AddTreinoActivity extends AppCompatActivity {
 
 
 
-        nomeEx=etxNomeExercicio.getText().toString();
-        qtRep=Integer.parseInt(etxRep.getText().toString());
-        qtTempo=Integer.parseInt(etxTemp.getText().toString());
+            nomeEx=etxNomeExercicio.getText().toString();
+
 
 
 
         Intent i=getIntent();
         if(!TextUtils.isEmpty(nomeEx)&&!TextUtils.isEmpty(etxRep.getText().toString())&&!TextUtils.isEmpty(etxTemp.getText().toString())){
             try{
+                qtRep=Integer.parseInt(etxRep.getText().toString());
+                qtTempo=Integer.parseInt(etxTemp.getText().toString());
                 db = FirebaseDatabase.getInstance().getReference("Usuarios").child(user_id).child("Exercicios").child(i.getStringExtra("TREINO_ID"));
                 String idExercicio=db.push().getKey();
                 Exercicio ex= new Exercicio(idExercicio,nomeEx,qtRep,qtTempo);

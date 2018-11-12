@@ -26,7 +26,7 @@ public class ExecutaTreinoActivity extends AppCompatActivity {
         txtExecRep=findViewById(R.id.txtExecRep);
         txtExecTempo=findViewById(R.id.txtExecTempo);
         btnProx=findViewById(R.id.btnProx);
-
+        //pega os valores da intent ADDTreinoActivity
         Intent i= getIntent();
         th=new Thread();
         nomeExercicioIntent=i.getStringExtra("NOME_EXE");
@@ -41,6 +41,8 @@ public class ExecutaTreinoActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         //Contador do meu mano Sekcy ABRAÇO AMIGO, QUANDO EU TIVER NA BANCA VO FALAR DE TU!
+        //Instancia uma Thread e usa sleep para rodar os ticks
+
         Thread th = new Thread(new Runnable() { //cria uma thread
             public void run() {
                 int t=Integer.parseInt(tempo);
