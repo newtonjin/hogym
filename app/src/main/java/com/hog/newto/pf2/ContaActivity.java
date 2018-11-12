@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -79,6 +80,7 @@ public class ContaActivity extends AppCompatActivity {
     private double Massa;
     private String diaS;
     private TextView txtDica;
+    private ImageView btnVoltar;
 
 
 
@@ -101,7 +103,7 @@ public class ContaActivity extends AppCompatActivity {
         txtDica=findViewById(R.id.txtDica);
         dia=findViewById(R.id.etxData);
         getSupportActionBar().setTitle("Minha Conta");
-
+        btnVoltar=findViewById(R.id.btnVoltar);
         txtNome=(EditText)findViewById(R.id.etxNome);
 
         imgConta=(CircleImageView)findViewById(R.id.imgConta);
@@ -283,7 +285,12 @@ public class ContaActivity extends AppCompatActivity {
         });
 
 
-
+        btnVoltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ContaActivity.this,TreinosActivity.class));
+            }
+        });
 
         btnConfirma.setOnClickListener(new View.OnClickListener() {
             @Override

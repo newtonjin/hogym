@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -104,6 +105,7 @@ public class TreinosActivity extends AppCompatActivity {
         switch(item.getItemId()){
            //caso o botão de sair seja selecionado
             case R.id.btnSair:
+                Toast.makeText(TreinosActivity.this,"Obrigado por usar o HoGYM",Toast.LENGTH_LONG).show();
                 logOut();
 
                 return true;
