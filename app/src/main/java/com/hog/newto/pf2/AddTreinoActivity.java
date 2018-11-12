@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -42,7 +43,7 @@ public class AddTreinoActivity extends AppCompatActivity {
     private String nomeEx;
     private Integer qtRep,qtTempo;
     public List<Exercicio> lsExercicio;
-    private ImageView btnExecuta;
+
     private String user_id;
 
 
@@ -62,7 +63,7 @@ public class AddTreinoActivity extends AppCompatActivity {
         lsExercicio=new ArrayList<>();
         lvExercicio=findViewById(R.id.lvExercicios);
 
-        btnExecuta=findViewById(R.id.btnExecuta);
+
         user_id=fb.getCurrentUser().getUid();
 
 
@@ -84,12 +85,7 @@ public class AddTreinoActivity extends AppCompatActivity {
         });
 
 
-        btnExecuta.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(AddTreinoActivity.this,ExecutaTreinoActivity.class));
-            }
-        });
+
 
 
 
@@ -109,7 +105,21 @@ public class AddTreinoActivity extends AppCompatActivity {
             }
         });
 
-
+       lvExercicio.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+           @Override
+           public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+               Exercicio e=lsExercicio.get(position);
+               String nomeExercicioIntent=e.getNomeEx();
+               int tempoIntent=e.getTempo();
+               int repIntent=e.getRep();
+               Intent i= new Intent(AddTreinoActivity.this,ExecutaTreinoActivity.class);
+               i.putExtra("NOME_EXE",nomeExercicioIntent);
+               i.putExtra("TEMPO_EXE",String.valueOf(tempoIntent));
+               i.putExtra("REP_EXE",String.valueOf(repIntent));
+               startActivity(i);
+               return true;
+           }
+       });
     }
 
     @Override
