@@ -258,11 +258,11 @@ public class ContaActivity extends AppCompatActivity {
                     grPie.invalidate();
 
                     if(imc<=17){
-                        txtDica.setText("\nProvavelmente você esteja muito abaixo do peso, toma cuidado! Se alimente com alimentos mais ricos em vitaminas e carboidratos em geral! imc de "+(int)imc+" é considerado muito baixo! procure um nutricionista.");
+                        txtDica.setText("\nProvavelmente você esteja muito abaixo do peso, tome cuidado! Se alimente com alimentos mais ricos em vitaminas e carboidratos em geral! imc de "+(int)imc+" é considerado muito baixo! procure um nutricionista.");
                     }else if(imc>=18 && imc<=18.49){
                         txtDica.setText("\nVocê pode estar abaixo do seu peso, adapte sua dieta para uma maior riqueza de proteínas e carboidratos, seu imc é de "+(int)imc+", procure um nutricionista.");
                     }else if(imc>=18.50 && imc<=24.99){
-                        txtDica.setText("\nVocê tá no seu peso ideal! obviamente que isto é uma aproximação, caso queima aumentar Massa Corporea ou músculos calcule seus macro nutrientes e adapte sua dieta! seu imc é de "+(int)imc+" procure um nutricionista!");
+                        txtDica.setText("\nVocê tá no seu peso ideal! obviamente que isto é uma aproximação, caso queira aumentar Massa Corporea ou músculos calcule seus macro nutrientes e adapte sua dieta! seu imc é de "+(int)imc+" procure um nutricionista!");
                     }else if(imc>=25 && imc<=29.99){
                         txtDica.setText("\nProvavelmente você esteja acima do peso! caso seja massa muscular não tem problemas, mas se for visivel a gordura é melhor adaptar sua dieta, aumentar em proteinas e diminuir em gorduras e carbos! seu imc é de "+(int)imc+" procure um nutricista!");
                     }else if(imc>=30 && imc<=34.99){
