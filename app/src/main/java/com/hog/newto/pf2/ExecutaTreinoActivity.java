@@ -17,6 +17,7 @@ public class ExecutaTreinoActivity extends AppCompatActivity {
     private String nomeExercicioIntent;
     private ImageView btnProx;
     static Thread th;
+    static int t;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,16 +46,26 @@ public class ExecutaTreinoActivity extends AppCompatActivity {
 
         Thread th = new Thread(new Runnable() { //cria uma thread
             public void run() {
-                int t=Integer.parseInt(tempo);
-                while (t>= 0) {
-                    txtExecTempo.setText(String.valueOf(t));
+                 t=Integer.parseInt(tempo);
+                 t++;
+                while (t> 0) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            txtExecTempo.setText(String.valueOf(t));
+                        }
+                    });
+
+                    System.out.println("carai entrou no while");
 
                     t--;
                     try {
                         Thread.sleep(1000); //espera 1 segundo para fazer a nova evolução
                     } catch (InterruptedException ex) {
+                        System.out.println("carai"+ex);
                     }
                 }
+                System.out.println("carai passou do while");
                 startActivity(new Intent(ExecutaTreinoActivity.this,AddTreinoActivity.class));
             }
         });
